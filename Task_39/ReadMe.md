@@ -31,26 +31,64 @@
 ### Запросы
 
 Просто выборка с лимитом 
-db.winequality.find().limit(5)
+*db.winequality.find().limit(5)*
 
 ![07_2](https://user-images.githubusercontent.com/95203401/166650088-38fbdf7e-d136-4c1a-8c76-ba99818c43b1.png)
 
-db.winequality.find({"alcohol":10})
 Выборка вина, где крепость 10 градусов 
+*db.winequality.find({"alcohol":10})*
 
 ![08](https://user-images.githubusercontent.com/95203401/166650119-3d3d5181-38de-4dcb-abab-f65e6271a4d3.png)
 
 Выборка где pH больше 3
-db.winequality.find({"pH":{$gt:3}})
+*db.winequality.find({"pH":{$gt:3}})*
 
 ![8 5](https://user-images.githubusercontent.com/95203401/166650435-83d2efd4-4e15-4601-b411-c6501574117c.png)
 
 
 Выборка ("фиксированная кислотность" > 13 and ("pH" > 3 or "качество" = 7))
-db.winequality.find({"fixed acidity" : {$gte : 13},$or: [{"pH" :{$gt : 3}},{quality : 7}]})
+*db.winequality.find({"fixed acidity" : {$gte : 13},$or: [{"pH" :{$gt : 3}},{quality : 7}]})*
 
 ![09](https://user-images.githubusercontent.com/95203401/166650506-ae6a531f-0f31-4da0-92a0-66ec4f6050ee.png)
 
+-----
+### Обновление данных
 
+обновление одной записи где ("pH" = 2.95 and "алкоголь" = 11.2), меняем поле "качество" = 8.2
+*db.winequality.updateOne({$and: [{"pH" : 2.95},{"alcohol" : 11.2}]}, {$set: {quality : 8.2}})*
 
+![10](https://user-images.githubusercontent.com/95203401/166650802-7da10fe0-6a7f-4fa8-8467-8d79e8981636.png)
 
+Обновление нескольких записей, где ("pH" = 2.9 и "алкоголь" > 11.2), меняем поле "качество" = 8.1
+db.winequality.updateMany({$and: [{"pH" : 2.95},{"alcohol" : {$gt: 11.2}}]}, {$set: {quality : 8.1}})
+
+![11](https://user-images.githubusercontent.com/95203401/166650936-f0b16fee-81d9-4f02-88dc-e3253978761c.png)
+
+### Задание повышенной сложности*
+
+Выборка ("плотность" >= 0.9 and "остаточный сахар" < 1.9) 
+*db.winequality.find({$and : [{"density" : {$gte : 0.9}},{"residual sugar" : 1.9 }] })*
+
+Результат без индекса
+*db.winequality.find({$and : [{"density" : {$gte : 0.9}},{"residual sugar" : 1.9 }] }).explain("executionStats")*
+
+![12](https://user-images.githubusercontent.com/95203401/166651020-7930bd9c-5bd6-4483-bc03-c2d87c2cf2ad.png)
+
+queryPlanner.winningPlan.stage = COLLSCAN, сканирование коллекции
+executionStats.totalKeysExamined = 0 говорит о том, индекс не используется. 
+executionStats.totalDocsExamined = 6497 значит что Mongo отсканировала 6497 документов
+
+Создаю индекс 
+*db.winequality.createIndex({"density" : 1, "residual" : 1})*
+
+![13](https://user-images.githubusercontent.com/95203401/166651079-7cc0097b-2303-485a-95de-d1736ff80962.png)
+
+Результат с индексом
+*db.winequality.find({$and : [{"density" : {$gte : 0.9}},{"residual sugar" : 1.9 }] }).explain("executionStats")*
+
+![14](https://user-images.githubusercontent.com/95203401/166651115-411a7d55-deb3-4915-9bbd-f55297537cd3.png)
+
+queryPlanner.winningPlan.inputStage.stage = IXSCAN указывает, что использовался индекс.
+executionStats.totalKeysExamined = 6497, индекс используется
+
+Я так понимаю для этого запроса выборка без индекса эффективнее?
