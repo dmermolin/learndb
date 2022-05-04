@@ -47,6 +47,7 @@
 
 
 Выборка ("фиксированная кислотность" > 13 and ("pH" > 3 or "качество" = 7)):
+
 **db.winequality.find({"fixed acidity" : {$gte : 13},$or: [{"pH" :{$gt : 3}},{quality : 7}]})**
 
 ![09](https://user-images.githubusercontent.com/95203401/166650506-ae6a531f-0f31-4da0-92a0-66ec4f6050ee.png)
@@ -55,11 +56,13 @@
 ### Обновление данных
 
 обновление одной записи где ("pH" = 2.95 and "алкоголь" = 11.2), меняем поле "качество" = 8.2:
+
 **db.winequality.updateOne({$and: [{"pH" : 2.95},{"alcohol" : 11.2}]}, {$set: {quality : 8.2}})**
 
 ![10](https://user-images.githubusercontent.com/95203401/166650802-7da10fe0-6a7f-4fa8-8467-8d79e8981636.png)
 
 Обновление нескольких записей, где ("pH" = 2.9 и "алкоголь" > 11.2), меняем поле "качество" = 8.1:
+
 **db.winequality.updateMany({$and: [{"pH" : 2.95},{"alcohol" : {$gt: 11.2}}]}, {$set: {quality : 8.1}})**
 
 ![11](https://user-images.githubusercontent.com/95203401/166650936-f0b16fee-81d9-4f02-88dc-e3253978761c.png)
@@ -67,9 +70,11 @@
 ### Задание повышенной сложности*
 
 Выборка ("плотность" >= 0.9 and "остаточный сахар" < 1.9):
+
 **db.winequality.find({$and : [{"density" : {$gte : 0.9}},{"residual sugar" : 1.9 }] })**
 
 Результат без индекса:
+
 ***db.winequality.find({$and : [{"density" : {$gte : 0.9}},{"residual sugar" : 1.9 }] }).explain("executionStats")**
 
 ![12](https://user-images.githubusercontent.com/95203401/166651020-7930bd9c-5bd6-4483-bc03-c2d87c2cf2ad.png)
@@ -79,11 +84,13 @@ executionStats.totalKeysExamined = 0 говорит о том, индекс не
 executionStats.totalDocsExamined = 6497 значит что Mongo отсканировала 6497 документов
 
 Создаю индекс:
+
 **db.winequality.createIndex({"density" : 1, "residual" : 1})**
 
 ![13](https://user-images.githubusercontent.com/95203401/166651079-7cc0097b-2303-485a-95de-d1736ff80962.png)
 
 Результат с индексом:
+
 **db.winequality.find({$and : [{"density" : {$gte : 0.9}},{"residual sugar" : 1.9 }] }).explain("executionStats")**
 
 ![14](https://user-images.githubusercontent.com/95203401/166651115-411a7d55-deb3-4915-9bbd-f55297537cd3.png)
