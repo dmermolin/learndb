@@ -9,6 +9,11 @@
 [bases.csv](https://github.com/dmermolin/learndb/files/8901069/bases.csv)
 [minions.csv](https://github.com/dmermolin/learndb/files/8901070/minions.csv)
 
+Создал схему **ur** для работы с промежуточными данными.
+
+```
+create schema ur;
+```
 
 Для них создал три временные таблицы, из которых потом буду раскидывать по справочникам:
 - bases
@@ -29,8 +34,8 @@ create table if not exists ur.bases
 create table if not exists ur.actions
 (
     id            int2,
-    fractions     varchar(20),
-    name          varchar(20),
+    fractions     varchar(100),
+    name          varchar(100),
     description   varchar(2000),
     type_action   varchar(20),
     count_in_desc int2
@@ -41,10 +46,10 @@ create table if not exists ur.actions
 create table if not exists ur.minions
 (
     id            int2,
-    fractions     varchar(20),
-    name          varchar(30),
+    fractions     varchar(100),
+    name          varchar(100),
     properties    varchar(2000),
-    action_type   varchar(20),
+    action_type   varchar(100),
     attack        int2,
     count_in_desc int2
 );

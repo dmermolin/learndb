@@ -16,27 +16,29 @@ create table if not exists ur.bases
 create table if not exists ur.actions
 (
     id            int2,
-    fractions     varchar(20),
-    name          varchar(20),
+    fractions     varchar(100),
+    name          varchar(100),
     description   varchar(2000),
-    type_action   varchar(20),
+    type_action   varchar(100),
     count_in_desc int2
 );
-\copy ur.bases FROM '/var/lib/postgresql/data/pgdata/csv_data/action.csv' DELIMITER ';' CSV HEADER;
+\copy ur.actions FROM '/var/lib/postgresql/data/pgdata/csv_data/action.csv' DELIMITER ';' CSV HEADER;
 
 create table if not exists ur.minions
 (
     id            int2,
-    fractions     varchar(20),
-    name          varchar(30),
+    fractions     varchar(100),
+    name          varchar(100),
     properties    varchar(2000),
-    action_type   varchar(20),
+    action_type   varchar(100),
     attack        int2,
     count_in_desc int2
 );
-\copy ur.bases FROM '/var/lib/postgresql/data/pgdata/csv_data/action.csv' DELIMITER ';' CSV HEADER;
+\copy ur.minions FROM '/var/lib/postgresql/data/pgdata/csv_data/minions.csv' DELIMITER ';' CSV HEADER;
 
 drop table ur.bases;
+drop table ur.actions;
+drop table ur.minions;
 
 select *
 from ur.bases;
