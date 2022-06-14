@@ -5,7 +5,10 @@
 
 Заранее подготовил три файла: 
 
-(приложить здесь файлы)
+[action.csv](https://github.com/dmermolin/learndb/files/8901068/action.csv)
+[bases.csv](https://github.com/dmermolin/learndb/files/8901069/bases.csv)
+[minions.csv](https://github.com/dmermolin/learndb/files/8901070/minions.csv)
+
 
 Для них создал три временные таблицы, из которых потом буду раскидывать по справочникам:
 - bases
