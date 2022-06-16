@@ -137,12 +137,15 @@ call ur.p_set_player_card_state('сброс');
 
 Получилось примерно так:
 **dc.fraction**
+
 ![image](https://user-images.githubusercontent.com/95203401/174103651-1a95f045-8eb4-4d2c-8e51-651264305d7a.png)
 
 **dc.bases**
+
 ![image](https://user-images.githubusercontent.com/95203401/174103922-1be22f73-7b2f-468c-bce5-dbd93d9b80c9.png)
 
 **dc.play_cards**
+
 ![image](https://user-images.githubusercontent.com/95203401/174104167-c35cc5e2-aebb-45bd-9154-108997cca81f.png)
 
 ### Непосредственно задания
@@ -232,10 +235,11 @@ set name = d.name || ' ; ' ||u.id
 from ur.bases u
 where u.name = d.name;
 ```
-До
+*До*
+
 ![image](https://user-images.githubusercontent.com/95203401/174105745-000533c5-7b8a-422d-8246-7f6935de1efd.png)
 
-После 
+*После*
 
 ![image](https://user-images.githubusercontent.com/95203401/174105798-a7ed3525-1817-4095-b59f-546f8d92d9c9.png)
 
