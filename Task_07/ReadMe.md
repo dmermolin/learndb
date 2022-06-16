@@ -43,7 +43,7 @@ grant all privileges on database smashup to smashup;
 ```sql
 create table if not exists dc.bases
 (
-    id serial constraint bases_pk primary key,
+	id serial constraint bases_pk primary key,
 	name varchar(20) not null,
 	code varchar(20) not null unique,
 	description varchar(200),
@@ -100,8 +100,8 @@ comment on column dc.fractions.name is 'понятное человеку наи
 ```
 create table if not exists dc.play_cards
 (
-    id serial constraint play_cards_pk primary key,
-    fraction int constraint play_cards_fk_01 references dc.fractions,
+	id serial constraint play_cards_pk primary key,
+	fraction int constraint play_cards_fk_01 references dc.fractions,
 	name varchar(20) not null,
 	description varchar(200),
 	action_type int constraint play_cards_fk_02 references dc.card_action_type not null,
