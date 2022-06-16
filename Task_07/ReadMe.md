@@ -40,7 +40,7 @@ grant all privileges on database smashup to smashup;
 
 Таблицы **bases**
 
-```
+```sql
 create table if not exists dc.bases
 (
     id serial constraint bases_pk primary key,
