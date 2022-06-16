@@ -35,10 +35,3 @@ create table if not exists ur.minions
     count_in_desc int2
 );
 \copy ur.minions FROM '/var/lib/postgresql/data/pgdata/csv_data/minions.csv' DELIMITER ';' CSV HEADER;
-
-drop table ur.bases;
-drop table ur.actions;
-drop table ur.minions;
-
-select *
-from ur.bases;
