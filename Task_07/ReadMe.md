@@ -65,7 +65,7 @@ comment on column dc.bases.third_place_award is 'количество очков
 
 Таблицы **card_action_type**
 
-```
+```sql
 create table if not exists dc.card_action_type
 (
     id serial constraint card_action_type_pk primary key,
@@ -81,12 +81,12 @@ comment on column dc.card_action_type.name is 'понятное человеку
 ```
 Таблицы **fractions**
 
-```
+```sql
 create table if not exists dc.fractions
 (
-    id serial not null constraint fractions_pk primary key,
-    code varchar(20) not null unique ,
-    name varchar(20) not null
+	id serial not null constraint fractions_pk primary key,
+	code varchar(20) not null unique ,
+	name varchar(20) not null
 );
 
 comment on table dc.fractions is 'Справочник. Фракции действий или приспешников';
@@ -97,7 +97,7 @@ comment on column dc.fractions.name is 'понятное человеку наи
 ```
 Таблицы **play_cards**
 
-```
+```sql
 create table if not exists dc.play_cards
 (
 	id serial constraint play_cards_pk primary key,
@@ -124,12 +124,12 @@ comment on column dc.play_cards.type_play_card is 'тип карты, присп
 ```
 Таблицы **player_card_state**
 
-```
+```sql
 create table if not exists dc.player_card_state
 (
-    id serial constraint player_card_state_pk primary key,
-    code varchar(20) not null unique ,
-    name varchar(20) not null
+	id serial constraint player_card_state_pk primary key,
+	code varchar(20) not null unique ,
+	name varchar(20) not null
 );
 
 comment on table dc.player_card_state is 'Справочник. Фракции действий или приспешников';
@@ -140,12 +140,12 @@ comment on column dc.player_card_state.name is 'понятное человек�
 ```
 Таблицы **turn_stage**
 
-```
+```sql
 create table if not exists dc.turn_stage
 (
-    id smallserial constraint turn_stage_pk primary key,
-    code varchar(20)not null unique,
-    name varchar(20) not null
+	id smallserial constraint turn_stage_pk primary key,
+	code varchar(20)not null unique,
+	name varchar(20) not null
 );
 comment on table dc.turn_stage is 'Этапы хода игрока, описаные в пункте 9.';
 
@@ -157,11 +157,11 @@ comment on column dc.turn_stage.name is 'понятное человеку на�
 
 Таблицы **bases_in_playing_field**
 
-```
+```sql
 create table if not exists gm.bases_in_playing_field
 (
-    id serial not null constraint bases_in_playing_field_pk primary key,
-    base int not null constraint bases_in_playing_field_fk_01 references dc.bases,
+	id serial not null constraint bases_in_playing_field_pk primary key,
+	base int not null constraint bases_in_playing_field_fk_01 references dc.bases,
 	base_life int2 not null ,
 	pk_match int not null constraint bases_in_playing_field_fk_02 references gm.game_match,
 	state_base char(1) not null
@@ -177,11 +177,11 @@ comment on column gm.bases_in_playing_field.state_base is 'текущее сос
 ```
 Таблицы **cards_in_bases**
 
-```
+```sql
 create table if not exists gm.cards_in_bases
 (
-    id serial not null constraint cards_in_bases_pk primary key,
-    bases_in_playing_field int not null constraint cards_in_bases_fk_01 references gm.bases_in_playing_field,
+	id serial not null constraint cards_in_bases_pk primary key,
+	bases_in_playing_field int not null constraint cards_in_bases_fk_01 references gm.bases_in_playing_field,
 	players_cards int not null constraint cards_in_bases_fk_02 references gm.player_card,
 	damage_card int not null
 );
@@ -195,12 +195,12 @@ comment on column gm.cards_in_bases.damage_card is 'текущая атака к
 ```
 Таблицы **game_match**
 
-```
+```sql
 create table if not exists gm.game_match
 (
-    id serial4 not null constraint game_match_pk primary key,
-    begin_match date not null ,
-    end_match date not null,
+	id serial4 not null constraint game_match_pk primary key,
+	begin_match date not null ,
+	end_match date not null,
 	count_players int2 not null
 );
 
@@ -213,11 +213,11 @@ comment on column gm.game_match.count_players is 'количество игро�
 ```
 Таблицы **match_process**
 
-```
+```sql
 create table if not exists gm.match_process
 (
-    id serial not null constraint match_process_pk primary key,
-    players_in_match int not null constraint match_process_fk_01 references dc.turn_stage,
+	id serial not null constraint match_process_pk primary key,
+	players_in_match int not null constraint match_process_fk_01 references dc.turn_stage,
 	turn_stage int not null constraint match_process_fk_02 references gm.players_in_match,
 	start_stage date,
 	end_stage date,
@@ -243,12 +243,12 @@ comment on column gm.match_process.got_point is 'сколько очков за�
 ```
 Таблицы **players**
 
-```
+```sql
 create table if not exists gm.players
 (
-    id serial4 not null constraint players_pk primary key,
-    nickname varchar(20) not null unique ,
-    email varchar(50) not null unique,
+	id serial4 not null constraint players_pk primary key,
+	nickname varchar(20) not null unique ,
+	email varchar(50) not null unique,
 	pass varchar(30) not null
 );
 
@@ -261,11 +261,11 @@ comment on column gm.players.pass is 'пароль игрока, тип varchar,
 ```
 Таблицы **player_card**
 
-```
+```sql
 create table if not exists gm.player_card
 (
-    id serial not null constraint player_card_pk primary key,
-    player_in_match int not null constraint player_card_fk_01 references gm.players_in_match,
+	id serial not null constraint player_card_pk primary key,
+	player_in_match int not null constraint player_card_fk_01 references gm.players_in_match,
 	play_card int not null constraint player_card_fk_02 references dc.play_cards,
 	player_card_state int not null constraint play_cards_fk_03 references dc.player_card_state
 );
@@ -279,11 +279,11 @@ comment on column gm.player_card.player_card_state is 'состояние кар
 ```
 Таблицы **players_in_match**
 
-```
+```sql
 create table if not exists gm.players_in_match
 (
-    id serial not null constraint players_in_match_pk primary key,
-    game_match int not null constraint players_in_match_fk_01 references gm.game_match,
+	id serial not null constraint players_in_match_pk primary key,
+	game_match int not null constraint players_in_match_fk_01 references gm.game_match,
 	players int not null constraint players_in_match_fk_02 references gm.players,
 	num_in_match smallint not null ,
 	points smallint not null
