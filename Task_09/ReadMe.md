@@ -134,3 +134,119 @@ call ur.p_set_player_card_state('рука');
 call ur.p_set_player_card_state('база');
 call ur.p_set_player_card_state('сброс');
 ```
+
+Получилось примерно так:
+**dc.fraction**
+![image](https://user-images.githubusercontent.com/95203401/174103651-1a95f045-8eb4-4d2c-8e51-651264305d7a.png)
+
+**dc.bases**
+![image](https://user-images.githubusercontent.com/95203401/174103922-1be22f73-7b2f-468c-bce5-dbd93d9b80c9.png)
+
+**dc.play_cards**
+![image](https://user-images.githubusercontent.com/95203401/174104167-c35cc5e2-aebb-45bd-9154-108997cca81f.png)
+
+### Непосредственно задания
+* Напишите запрос по своей базе с регулярным выражением, добавьте пояснение, что вы хотите найти.
+
+```
+--все записи, где desscription начинается с 'Можешь%'
+select *
+from dc.play_cards
+where description like 'Можешь%';
+```
+![image](https://user-images.githubusercontent.com/95203401/174105045-24678d12-1ca7-48d9-9c5c-0ffafff492f8.png)
+
+```
+--записи, где в description есть любая цифра
+select *
+from dc.play_cards
+where description similar to '%[0-9]%';
+```
+![image](https://user-images.githubusercontent.com/95203401/174105188-50a432c8-2c52-417d-b10c-03574d3ee436.png)
+
+```
+--записи, где в description есть слово "приспешник" или "действие"
+select *
+from dc.play_cards
+where description similar to '%(приспешник|действие)%';
+```
+![image](https://user-images.githubusercontent.com/95203401/174105297-619e1658-ca1a-449b-b9d3-a9671c5c0cdb.png)
+
+
+
+* Напишите запрос по своей базе с использованием LEFT JOIN и INNER JOIN, как порядок соединений в FROM влияет на результат? Почему?
+
+```
+--inner join. Просто соединяем карты с фракцией
+select pc.id,
+       f.name as fraction,
+       pc.name,
+       pc.description,
+       pc.action_type,
+       pc.damage,
+       pc.quantity_in_deck,
+       pc.code,
+       pc.type_play_card
+from dc.play_cards pc
+         inner join dc.fractions f on f.id = pc.fraction;
+```
+![image](https://user-images.githubusercontent.com/95203401/174105402-ed663be8-4656-4a53-8977-72566b71b6bd.png)
+
+
+```
+--left join и inner join. Смотрим тип специального действия, если оно есть, и добавляем фракцию
+select pc.id,
+       f.name   as fraction,
+       pc.name,
+       pc.description,
+       cat.name as action_type,
+       pc.damage,
+       pc.quantity_in_deck,
+       pc.code,
+       pc.type_play_card
+from dc.play_cards pc
+         inner join dc.fractions f on f.id = pc.fraction
+         left join dc.card_action_type cat on cat.id = pc.action_type;
+```
+![image](https://user-images.githubusercontent.com/95203401/174105484-790fd32e-a069-4f57-8b1e-16cebc1715b4.png)
+
+
+* Напишите запрос на добавление данных с выводом информации о добавленных строках.
+
+```
+truncate table dc.bases cascade;
+
+INSERT INTO dc.bases (name, code, description, lives, first_place_award, second_place_award, third_place_award)
+SELECT name, ur.ru_translit(name), properties, health, first_place, second_place, third_place
+FROM ur.bases
+returning id,name, code, description, lives, first_place_award, second_place_award, third_place_award;
+```
+![image](https://user-images.githubusercontent.com/95203401/174105614-9c676878-226e-484e-98fd-a43a1f952fb8.png)
+
+
+* Напишите запрос с обновлением данные используя UPDATE FROM
+
+```
+update dc.bases d
+set name = d.name || ' ; ' ||u.id
+from ur.bases u
+where u.name = d.name;
+```
+До
+![image](https://user-images.githubusercontent.com/95203401/174105745-000533c5-7b8a-422d-8246-7f6935de1efd.png)
+
+После 
+
+![image](https://user-images.githubusercontent.com/95203401/174105798-a7ed3525-1817-4095-b59f-546f8d92d9c9.png)
+
+
+
+* Напишите запрос для удаления данных с оператором DELETE используя join с другой таблицей с помощью using
+
+```
+delete from dc.bases b
+    using ur.bases u
+where b.lives between 18 and 20;
+```
+![image](https://user-images.githubusercontent.com/95203401/174105942-b3039e66-e549-4100-b03c-c112dac40a26.png)
+
