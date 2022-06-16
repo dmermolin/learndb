@@ -95,7 +95,7 @@ comment on column dc.fractions.code is 'уникальный в рамках т�
 comment on column dc.fractions.name is 'понятное человеку наименование фракции на русском языке, тип varchar, длина 20';
 
 ```
-Таблицы **play_cardsdc.play_cards**
+Таблицы **play_cards**
 
 ```
 create table if not exists dc.play_cards
