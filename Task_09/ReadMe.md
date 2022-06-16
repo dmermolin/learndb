@@ -17,7 +17,7 @@ create schema ur;
 
 Для них создал три временные таблицы, из которых потом буду раскидывать по справочникам:
 - bases
-```
+```sql
 create table if not exists ur.bases
 (
     id           int2,
@@ -30,7 +30,7 @@ create table if not exists ur.bases
 );
 ```
 - actions
-```
+```sql
 create table if not exists ur.actions
 (
     id            int2,
@@ -42,7 +42,7 @@ create table if not exists ur.actions
 );
 ```
 - minions
-```
+```sql
 create table if not exists ur.minions
 (
     id            int2,
@@ -90,7 +90,7 @@ create table if not exists ur.minions
 Можно было с хранимками не заморачиваться, но интересно было попробовать)
 
 Непосредственно заполнение данных, используя хранимки:
-```
+```sql
 do
 $$
     declare
@@ -151,7 +151,7 @@ call ur.p_set_player_card_state('сброс');
 ### Непосредственно задания
 * Напишите запрос по своей базе с регулярным выражением, добавьте пояснение, что вы хотите найти.
 
-```
+```sql
 --все записи, где desscription начинается с 'Можешь%'
 select *
 from dc.play_cards
@@ -159,7 +159,7 @@ where description like 'Можешь%';
 ```
 ![image](https://user-images.githubusercontent.com/95203401/174105045-24678d12-1ca7-48d9-9c5c-0ffafff492f8.png)
 
-```
+```sql
 --записи, где в description есть любая цифра
 select *
 from dc.play_cards
@@ -167,7 +167,7 @@ where description similar to '%[0-9]%';
 ```
 ![image](https://user-images.githubusercontent.com/95203401/174105188-50a432c8-2c52-417d-b10c-03574d3ee436.png)
 
-```
+```sql
 --записи, где в description есть слово "приспешник" или "действие"
 select *
 from dc.play_cards
@@ -179,7 +179,7 @@ where description similar to '%(приспешник|действие)%';
 
 * Напишите запрос по своей базе с использованием LEFT JOIN и INNER JOIN, как порядок соединений в FROM влияет на результат? Почему?
 
-```
+```sql
 --inner join. Просто соединяем карты с фракцией
 select pc.id,
        f.name as fraction,
@@ -196,7 +196,7 @@ from dc.play_cards pc
 ![image](https://user-images.githubusercontent.com/95203401/174105402-ed663be8-4656-4a53-8977-72566b71b6bd.png)
 
 
-```
+```sql
 --left join и inner join. Смотрим тип специального действия, если оно есть, и добавляем фракцию
 select pc.id,
        f.name   as fraction,
@@ -216,7 +216,7 @@ from dc.play_cards pc
 
 * Напишите запрос на добавление данных с выводом информации о добавленных строках.
 
-```
+```sql
 truncate table dc.bases cascade;
 
 INSERT INTO dc.bases (name, code, description, lives, first_place_award, second_place_award, third_place_award)
@@ -229,7 +229,7 @@ returning id,name, code, description, lives, first_place_award, second_place_awa
 
 * Напишите запрос с обновлением данные используя UPDATE FROM
 
-```
+```sql
 update dc.bases d
 set name = d.name || ' ; ' ||u.id
 from ur.bases u
@@ -247,7 +247,7 @@ where u.name = d.name;
 
 * Напишите запрос для удаления данных с оператором DELETE используя join с другой таблицей с помощью using
 
-```
+```sql
 delete from dc.bases b
     using ur.bases u
 where b.lives between 18 and 20;
