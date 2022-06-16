@@ -20,16 +20,19 @@ DML в PostgreSQL
 select *
 from dc.play_cards
 where description like 'Можешь%';
+
 --записи, где в description есть любая цифра
 select *
 from dc.play_cards
 where description similar to '%[0-9]%';
+
 --записи, где в description есть слово "приспешник" или "действие"
 select *
 from dc.play_cards
 where description similar to '%(приспешник|действие)%';
 
 --2. Напишите запрос по своей базе с использованием LEFT JOIN и INNER JOIN, как порядок соединений в FROM влияет на результат? Почему?
+
 
 --inner join. Просто соединяем карты с фракцией
 select pc.id,
@@ -61,20 +64,23 @@ from dc.play_cards pc
 --3. Напишите запрос на добавление данных с выводом информации о добавленных строках.
 truncate table dc.bases cascade;
 
-select * from dc.bases;
-
 INSERT INTO dc.bases (name, code, description, lives, first_place_award, second_place_award, third_place_award)
 SELECT name, ur.ru_translit(name), properties, health, first_place, second_place, third_place
 FROM ur.bases
 returning id,name, code, description, lives, first_place_award, second_place_award, third_place_award;
 
 --4. Напишите запрос с обновлением данные используя UPDATE FROM.
+
+select * from dc.bases d;
+
 update dc.bases d
 set name = d.name || ' ; ' ||u.id
 from ur.bases u
 where u.name = d.name;
 
 --5. Напишите запрос для удаления данных с оператором DELETE используя join с другой таблицей с помощью using.
+
+select * from dc.bases b;
 
 select * from dc.bases b
  join ur.bases using (name)
