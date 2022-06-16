@@ -77,4 +77,6 @@ create table if not exists ur.minions
 - таблица **ur.actions** ![05](https://user-images.githubusercontent.com/95203401/173618621-3d3ae208-9320-4f2b-b432-6a9f470fd102.png)
 - таблица **ur.minions** ![06](https://user-images.githubusercontent.com/95203401/173618709-1d0b9fbb-56f7-451f-a3e9-e2ad0d1bd597.png)
 
-### заполняю справочники из подготовленных таблиц
+### Заполняю справочники из подготовленных таблиц
+
+Предварительно пришлось альтернуть таблицы, не угадал с размерностью. 
