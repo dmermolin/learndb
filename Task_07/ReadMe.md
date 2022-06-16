@@ -68,9 +68,9 @@ comment on column dc.bases.third_place_award is 'количество очков
 ```sql
 create table if not exists dc.card_action_type
 (
-    id serial constraint card_action_type_pk primary key,
-    code varchar(20) not null unique ,
-    name varchar(20) not null
+	id serial constraint card_action_type_pk primary key,
+	code varchar(20) not null unique ,
+	name varchar(20) not null
 );
 
 comment on table dc.card_action_type is 'Справочник. Специальное действие при розыгрывании карт.';
